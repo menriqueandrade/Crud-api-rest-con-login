@@ -37,6 +37,43 @@ void adicionarUsuario(
   });
 }
 
+void validarUsuario(
+    String apellido,
+    String usuario,) async {
+  var url = Uri.parse(
+      "https://propiedadh.000webhostapp.com/API/validar.php");
+
+  await http.post(url, body: {
+    'apellido': apellido,
+    'usuario': usuario,
+  });
+}
+
+Future<List<Usuarios>> validarUsuariosConInfo(
+  http.Client client, String apellido, String usuario) async {
+  //final response =
+  //    await client.get('https://desarolloweb2021a.000webhostapp.com/API/listarnotas.php');
+  //var id = "2";
+  var url= Uri.parse("https://propiedadh.000webhostapp.com/API/validar.php");
+  final response = await http.post(url, body: {
+    'apellido': apellido,
+    'usuario': usuario,
+  });
+  // Usa la función compute para ejecutar parsePhotos en un isolate separado
+  return compute(pasaraListaValidada, response.body);
+}
+
+// Una función que convierte el body de la respuesta en un List<Photo>
+List<Usuarios> pasaraListaValidada(String responseBody) {
+  final pasar = json.decode(responseBody).cast<Map<String, dynamic>>();
+
+  return pasar.map<Usuarios>((json) => Usuarios.fromJson(json)).toList();
+}
+
+
+
+
+
 // void editarUsuarios(
 //     String id,
 //     String nombre,
